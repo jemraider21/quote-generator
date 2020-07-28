@@ -3,9 +3,25 @@ const quoteText = document.getElementById("quote");
 const authorText = document.getElementById("author");
 const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
+const loader = document.getElementById("loader");
+
+// Show loading
+function loading(){
+    loader.hidden = false;
+    quoteContainer.hidden = true;
+}
+
+// Hide loading
+function complete(){
+    if(!loader.hidden){
+        quoteContainer.hidden = false;
+        loader.hidden = true;
+    }
+}
 
 // Get quote from API
 async function getQuote(){
+    loading();
     const proxyURL = "https://damp-brushlands-66931.herokuapp.com/"; // Personal proxy server
     const apiURL = "https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
     try{
@@ -26,6 +42,9 @@ async function getQuote(){
             quoteText.classList.remove("long-quote");
         }
         quoteText.innerText = data.quoteText;
+        
+        // Stop loading, show quote
+        complete(); 
     } catch(error){
         getQuote();
     }
